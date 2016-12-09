@@ -1,0 +1,82 @@
+<html>
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+   
+   <style>
+	html, body {
+	height: 100%;
+	}
+
+	html {
+	display: table;
+	margin: auto;
+	}
+
+	body {
+	display: table-cell;
+	vertical-align: middle;
+	padding:20px;
+	}
+   </style>
+   
+</head>
+<body>
+
+<h4>Node.js Streaming Videos Using Livestreamer, FFMPEG, Socket.io And Imagemagick Over UDP Protocol <br><li>(Powered By Ali Khan)</li></h4>
+
+<h5>Client Status Logs:</h5>
+ <ul id="status-logs"></ul>
+
+		<canvas id="videoCanvas" width="500" height="500" style="border:1px solid #333;">
+			<p>
+			Please use a browser that supports the Canvas Element, like
+			<a href="http://www.google.com/chrome">Chrome</a>,
+			<a href="http://www.mozilla.com/firefox/">Firefox</a>,
+			<a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+			</p>				
+		</canvas>
+
+	 <script>
+        $(function(){
+            var iosocket = io.connect('http://33.33.33.40:9000');
+            iosocket.on('connect', function () {
+			
+                $('#status-logs').append($('<li>Connected</li>'));
+				
+				iosocket.on('disconnect', function() {
+                    $('#status-logs').append('<li>Disconnected</li>');
+                });
+				
+                iosocket.on('message', function(message) {
+                    $('#status-logs').append($('<li></li>').text(message));
+					console.log(message);
+                });
+			
+				iosocket.on('render', function(data) {
+					try {
+						//console.log(data);
+						console.log('Frame Arrived');
+						var canvas = document.getElementById('videoCanvas');
+						var context = canvas.getContext('2d');
+						var imageObject = new Image();
+						imageObject.src = 'data:image/jpeg;base64,' + data;
+						imageObject.onload = function(){
+						context.height = imageObject.height;
+						context.width = imageObject.width;
+						console.log(imageObject.width);
+						console.log(imageObject.height);
+						context.drawImage(imageObject,0,0,context.width,context.height);
+					}
+					
+					} catch(e){
+						console.log(e); 
+					}
+				});				
+                
+            });
+            
+        });
+    </script>
+</body>
+</html>

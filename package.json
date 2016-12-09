@@ -1,0 +1,14 @@
+{
+  "name"         : "@alikhan/nodejs-ffmpeg-livestreamer-video-streaming",
+  "version"      : "0.0.1",
+  "description"  : "Node.js Streaming Videos Using Livestreamer, FFMPEG, Socket.io And Imagemagick Over UDP Protocol",
+  "main"         : "server.js",
+  "author"       : "Ali khan",
+  "email"		 : "p2p.alikhan@gmail.com", 	
+  "dependencies": {
+    "body-parser": "latest",
+    "express": "latest",
+    "method-override": "latest",
+    "socket.io": "latest"	
+  }
+}
